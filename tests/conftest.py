@@ -1,0 +1,35 @@
+import pytest
+
+from churn import data
+
+
+@pytest.fixture(scope="session")
+def clean_df():
+    """DataFrame limpo, carregado uma vez por sessão de testes."""
+    return data.load_clean()
+
+
+@pytest.fixture
+def sample_customer() -> dict:
+    """Payload válido de exemplo para o endpoint /predict."""
+    return {
+        "gender": "Female",
+        "senior_citizen": "No",
+        "partner": "Yes",
+        "dependents": "No",
+        "tenure_months": 12,
+        "phone_service": "Yes",
+        "multiple_lines": "No",
+        "internet_service": "Fiber optic",
+        "online_security": "No",
+        "online_backup": "No",
+        "device_protection": "No",
+        "tech_support": "No",
+        "streaming_tv": "Yes",
+        "streaming_movies": "Yes",
+        "contract": "Month-to-month",
+        "paperless_billing": "Yes",
+        "payment_method": "Electronic check",
+        "monthly_charges": 89.65,
+        "total_charges": 1075.8,
+    }
