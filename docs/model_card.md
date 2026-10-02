@@ -49,14 +49,19 @@ contrato, forma de pagamento). Lista completa em `churn.config.FEATURES`.
 ## Modelo campeão
 
 **Random Forest** (`sklearn.ensemble.RandomForestClassifier`), selecionado
-entre três candidatos — Regressão Logística, Random Forest, MLP — por
-F1-score na classe churn (métrica técnica primária definida na Etapa 1,
-ver [`docs/metrics.md`](metrics.md)). Artefato salvo em
+entre três candidatos — Regressão Logística, Random Forest, MLP — pelo
+F1-score médio na validação cruzada, na classe churn (métrica técnica
+primária definida na Etapa 1, ver [`docs/metrics.md`](metrics.md)). O
+conjunto de teste não participa da escolha. Artefato salvo em
 `models/champion.joblib`; código de treino em `src/churn/train.py`.
 
 Hiperparâmetros: `n_estimators=300`, `min_samples_leaf=5`,
-`class_weight="balanced"`, seed fixa. Sem busca de hiperparâmetros
-(GridSearch/RandomSearch) — valores fixos, não otimizados.
+`class_weight="balanced"`, seed fixa. Validados por busca em grade
+(`GridSearchCV`, 24 combinações de `max_depth`, `min_samples_leaf` e
+`max_features`, 5-fold CV no treino): a configuração original foi a
+melhor, e as 10 melhores ficam a menos de 0,005 de F1 entre si — o
+desempenho é estável em relação aos hiperparâmetros. Registro em
+[`docs/rf_grid_search.csv`](rf_grid_search.csv).
 
 Pré-processamento (`src/churn/features.py`, igual para os três
 candidatos): numéricas com imputação por mediana + padronização;
@@ -79,8 +84,14 @@ justificativa detalhada em
 **Por que o Random Forest:** maior F1 tanto em CV quanto no teste (margem
 pequena mas consistente sobre o baseline), e mantém a maior Precisão@K —
 a métrica de negócio — ao longo de toda a faixa razoável de K, não só no
-K=10% assumido inicialmente (ver notebook, seção 5). O ganho sobre o
+K=10% assumido inicialmente (ver notebook, seção 6). O ganho sobre o
 baseline de Regressão Logística é real, porém modesto.
+
+**O que mais pesa no ranking** (permutation importance no teste, queda no
+AUC-PR; notebook, seção 7): `contract` e `tenure_months` lideram, seguidos
+de `dependents`, `total_charges` e `internet_service`. `payment_method`
+tem importância perto de zero porque seu sinal já está quase todo em
+`contract` (78% de quem paga por *Electronic check* tem contrato mensal).
 
 **MLP não escolhido apesar de maior precisão isolada:** seu recall baixo
 (0,473) é explicado em parte por uma limitação de biblioteca (ver abaixo),
@@ -92,8 +103,11 @@ não só por capacidade de modelagem.
   parâmetro para MLP — é o único dos três candidatos sem correção
   explícita para o desbalanceamento de classes (73,5%/26,5%), o que
   penaliza seu recall.
-- **Sem busca de hiperparâmetros:** os três candidatos usam configurações
-  fixas e razoáveis, não otimizadas por validação cruzada.
+- **Busca de hiperparâmetros só no Random Forest:** Regressão Logística e
+  MLP usam configurações fixas e razoáveis, não otimizadas. Como a busca
+  manteve a configuração original do Random Forest, a comparação entre os
+  três segue no mesmo nível de ajuste — mas um MLP ajustado poderia
+  reduzir a distância para o campeão.
 - **Threshold fixo (0,5) vs. decisão por ranking:** precisão/recall/F1
   reportados usam corte 0,5, mas a decisão de negócio real é por top-K
   (ML Canvas, bloco 3). Os dois são coerentes no cenário atual (o
@@ -113,6 +127,10 @@ não só por capacidade de modelagem.
   correlacionadas indiretamente com geografia/renda (ex.: tipo de
   internet, forma de pagamento) permanecem no modelo e podem carregar
   proxies desse viés. Não quantificado nesta etapa.
+- `gender` tem importância nula no modelo (dentro do ruído da
+  permutação): o ranking não usa gênero. Isso não garante ausência de
+  viés — uma feature pouco importante ainda pode ter desempenho desigual
+  entre grupos.
 - Nenhuma análise de desempenho por subgrupo (ex.: por faixa etária via
   `senior_citizen`, por `gender`) foi feita até aqui — fica como item para
   a revisão final da Etapa 4.
@@ -125,6 +143,7 @@ de ambiente/execução (API, testes) entram nesta seção após a Etapa 3.
 ## Status
 
 - **Etapa 1 (concluído):** dados, features, exclusões e uso pretendido.
-- **Etapa 2 (concluído):** performance, comparação e justificativa do campeão.
+- **Etapa 2 (concluído):** performance, comparação e justificativa do
+  campeão, busca de hiperparâmetros e importância das features.
 - **Etapa 3 (pendente):** reprodutibilidade de ambiente e comportamento via API.
 - **Etapa 4 (pendente):** revisão final de limitações e vieses, consolidação.
