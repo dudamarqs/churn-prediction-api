@@ -1,5 +1,8 @@
 """Treino, comparação dos modelos e persistência do campeão (Etapa 2).
 
+Critério de escolha do campeão: maior F1 médio na validação cruzada
+estratificada (ver docs/metrics.md).
+
 Executar da raiz do projeto:
 
     python -m churn.train
@@ -43,7 +46,11 @@ def run() -> pd.DataFrame:
         fitted[name] = pipeline
         rows.append({"model": name, "cv_f1_mean": cv_mean, "cv_f1_std": cv_std, **evaluate(y_test, y_pred, y_proba)})
 
-    results = pd.DataFrame(rows).sort_values("f1", ascending=False).reset_index(drop=True)
+    # O campeão é escolhido pelo F1 médio da validação cruzada (só treino).
+    # O teste fica reservado para a estimativa final: usá-lo na escolha o
+    # transformaria em mais um conjunto de validação e deixaria as métricas
+    # reportadas otimistas.
+    results = pd.DataFrame(rows).sort_values("cv_f1_mean", ascending=False).reset_index(drop=True)
 
     champion_name = results.loc[0, "model"]
     config.MODELS_DIR.mkdir(parents=True, exist_ok=True)
