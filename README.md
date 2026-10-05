@@ -16,17 +16,19 @@ de um orçamento limitado (ver [ML Canvas](docs/ml_canvas.md)).
 - [x] ML Canvas — [`docs/ml_canvas.md`](docs/ml_canvas.md)
 - [x] Métricas técnica e de negócio — [`docs/metrics.md`](docs/metrics.md)
 - [x] EDA + Baseline (Regressão Logística) — [`notebooks/eda_baseline.ipynb`](notebooks/eda_baseline.ipynb)
-- [x] Modelagem comparativa (Random Forest + MLP) — Etapa 2 — [`docs/model_comparison.csv`](docs/model_comparison.csv)
+- [x] Modelagem comparativa (Random Forest + MLP) — Etapa 2 — [`notebooks/model_comparison.ipynb`](notebooks/model_comparison.ipynb) + [`docs/model_comparison.csv`](docs/model_comparison.csv)
 - [x] API FastAPI + testes — Etapa 3
 - [ ] Model Card + vídeo STAR — Etapa 4
 
 ## Resultado atual
 
 Modelo campeão: **Random Forest** (`models/champion.joblib`), selecionado
-por F1-score na classe churn entre os três candidatos (Regressão Logística,
-Random Forest, MLP) — ver [`docs/model_comparison.csv`](docs/model_comparison.csv)
-para a tabela comparativa completa e [`docs/metrics.md`](docs/metrics.md)
-para a justificativa das métricas.
+pelo F1-score médio na validação cruzada (classe churn) entre os três
+candidatos (Regressão Logística, Random Forest, MLP) — ver
+[`docs/model_comparison.csv`](docs/model_comparison.csv) para a tabela
+comparativa completa, [`docs/metrics.md`](docs/metrics.md) para a
+justificativa das métricas e o [Model Card](docs/model_card.md) para
+performance, limitações e vieses.
 
 ## Estrutura do projeto
 
