@@ -95,15 +95,23 @@ tem importância perto de zero porque seu sinal já está quase todo em
 `contract` (78% de quem paga por *Electronic check* tem contrato mensal).
 
 **MLP não escolhido apesar de maior precisão isolada:** seu recall baixo
-(0,473) é explicado em parte por uma limitação de biblioteca (ver abaixo),
-não só por capacidade de modelagem.
+(0,473) vem do treino sem balanceamento de classes somado ao corte de 0,5
+(ver abaixo), não de falta de capacidade de modelagem — seu ROC-AUC
+(0,844) fica perto dos demais.
 
 ## Limitações conhecidas
 
-- **`MLPClassifier` sem `class_weight`:** o Scikit-Learn não expõe esse
-  parâmetro para MLP — é o único dos três candidatos sem correção
-  explícita para o desbalanceamento de classes (73,5%/26,5%), o que
-  penaliza seu recall.
+- **MLP treinado sem balanceamento de classes:** o `MLPClassifier` não
+  tem `class_weight`, e o treino atual não usou a alternativa que ele
+  aceita (`sample_weight`). É o único dos três candidatos sem correção
+  para o desbalanceamento (73,5%/26,5%), então suas probabilidades ficam
+  perto da taxa real de churn e o corte de 0,5 fica alto para ele: no
+  teste, classifica 18% dos clientes como churn, contra 26,5% reais, e o
+  recall cai para 0,473. A parada antecipada (`early_stopping=True`)
+  agrava o efeito: ela escolhe a época pela acurácia, que favorece a
+  classe majoritária, e ficou com o modelo da 3ª época. A capacidade de
+  ranqueamento não é afetada da mesma forma (ROC-AUC 0,844). Correção
+  possível, ainda pendente: treinar o MLP com `sample_weight` balanceado.
 - **Busca de hiperparâmetros só no Random Forest:** Regressão Logística e
   MLP usam configurações fixas e razoáveis, não otimizadas. Como a busca
   manteve a configuração original do Random Forest, a comparação entre os
