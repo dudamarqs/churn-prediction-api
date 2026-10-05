@@ -82,10 +82,11 @@ justificativa detalhada em
 | MLP | 0,615 | 0,683 | 0,473 | 0,559 | 0,844 | 0,635 | 0,743 |
 
 **Por que o Random Forest:** maior F1 tanto em CV quanto no teste (margem
-pequena mas consistente sobre o baseline), e mantém a maior Precisão@K —
-a métrica de negócio — ao longo de toda a faixa razoável de K, não só no
-K=10% assumido inicialmente (ver notebook, seção 6). O ganho sobre o
-baseline de Regressão Logística é real, porém modesto.
+pequena mas consistente sobre o baseline). Na métrica de negócio, os três
+modelos ficam praticamente empatados: o Random Forest lidera ou empata em
+8 de 10 valores de K entre 5% e 50%, incluindo o K=10% assumido (0,771),
+com diferenças de no máximo 0,03 entre os modelos (ver notebook, seção 6).
+O ganho sobre o baseline de Regressão Logística é real, porém modesto.
 
 **O que mais pesa no ranking** (permutation importance no teste, queda no
 AUC-PR; notebook, seção 7): `contract` e `tenure_months` lideram, seguidos
@@ -110,9 +111,9 @@ não só por capacidade de modelagem.
   reduzir a distância para o campeão.
 - **Threshold fixo (0,5) vs. decisão por ranking:** precisão/recall/F1
   reportados usam corte 0,5, mas a decisão de negócio real é por top-K
-  (ML Canvas, bloco 3). Os dois são coerentes no cenário atual (o
-  Random Forest lidera em ambos), mas essa coerência não é garantida se a
-  distribuição de scores mudar com novos dados.
+  (ML Canvas, bloco 3). O Random Forest lidera em F1, mas no ranking os
+  três modelos ficam praticamente empatados — a vantagem em F1 não se
+  traduz em ganho relevante de Precision@K.
 - **Dataset estático, sem histórico temporal:** o modelo estima risco
   "dado o perfil atual", não uma janela de tempo até o cancelamento (ML
   Canvas, bloco 5) — não deve ser interpretado como previsão de prazo.

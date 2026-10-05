@@ -27,9 +27,17 @@ desperdiçar ações de retenção em falsos positivos.
 O case não define a capacidade real de atendimento do time de retenção,
 então **K é parametrizado como uma fração da base** em vez de um número
 fixo de clientes. Valor inicial documentado: `TOP_K_PERCENT = 0.10` (top
-10%), definido em `src/config.py`. É uma suposição inicial, não um valor
-travado — a Etapa 2 pode (e deve) testar outros valores de K conforme a
-distribuição real dos scores dos modelos treinados.
+10%), definido em `src/churn/config.py`. É uma suposição inicial, não um
+valor travado — a Etapa 2 pode (e deve) testar outros valores de K conforme
+a distribuição real dos scores dos modelos treinados.
+
+Na Etapa 2, a curva de Precision@K para K de 5% a 50%
+([`notebooks/model_comparison.ipynb`](../notebooks/model_comparison.ipynb),
+seção 6) mostrou os três modelos praticamente empatados (diferenças de no
+máximo 0,03): o campeão lidera ou empata em 8 dos 10 valores de K,
+incluindo K=10%. Por isso a escolha do campeão é feita pela métrica
+técnica (F1 na validação cruzada), e K=10% segue como suposição de
+trabalho.
 
 ## Ver também
 
