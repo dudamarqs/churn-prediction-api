@@ -44,7 +44,8 @@ performance, limitações e vieses.
 │   ├── features.py            # pré-processador (ColumnTransformer)
 │   ├── models.py               # candidatos (Logística, RF, MLP)
 │   ├── train.py                 # treino, comparação e persistência do campeão
-│   └── evaluate.py              # métricas técnica e de negócio
+│   ├── evaluate.py              # métricas técnica e de negócio
+│   └── predict.py               # carga do modelo e predição (usado pela API)
 ├── models/                   # modelo campeão serializado (.joblib)
 ├── tests/                    # testes automatizados (pytest)
 ├── docs/                     # ML Canvas, métricas, comparação de modelos, Model Card
