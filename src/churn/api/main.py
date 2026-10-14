@@ -6,11 +6,14 @@ Executar da raiz do projeto:
 """
 
 from functools import lru_cache
+from pathlib import Path
 
+import joblib
 from fastapi import FastAPI, HTTPException
 
+from churn import config
 from churn.api.schemas import CustomerFeatures, HealthResponse, PredictionResponse
-from churn.predict import classify, load_model, predict_proba
+from churn.predict import classify, predict_proba
 
 app = FastAPI(
     title="Churn Prediction API",
@@ -20,9 +23,19 @@ app = FastAPI(
 
 
 @lru_cache(maxsize=1)
+def _load_model(path: Path):
+    """Mantém em cache somente o artefato carregado com sucesso."""
+    return joblib.load(path)
+
+
 def get_model():
-    """Carrega o Pipeline treinado uma única vez por processo."""
-    return load_model()
+    """Permite encontrar um modelo criado após a primeira chamada à API.
+
+    Para substituir um artefato já carregado, reinicie o processo da API.
+    """
+    if not config.MODEL_PATH.exists():
+        return None
+    return _load_model(config.MODEL_PATH)
 
 
 @app.get("/health", response_model=HealthResponse)

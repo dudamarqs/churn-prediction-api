@@ -30,6 +30,8 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+.serena/
+.pip-tmp/
 
 # Processed data artifacts (keep only source under data/raw)
 data/processed/*
