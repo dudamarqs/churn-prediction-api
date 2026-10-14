@@ -47,6 +47,20 @@ Instale Python 3.12 se `py -3.12` não estiver disponível. O lock inclui depend
 - Vídeo STAR ainda precisa ser gravado/publicado, e os links submetidos na plataforma.
 - Esta cópia foi obtida por ZIP; o histórico de commits permanece no GitHub original. As alterações locais não foram publicadas.
 
+## Atualização — 14/10/2026 (PR #6)
+
+Validação repetida depois de integrar o PR #6 (módulo `churn.predict` e
+novos testes), com Python 3.14.7 e scikit-learn 1.9.1 em Windows:
+
+- `python -m pytest -q`: **21 passed**.
+- Respostas da API idênticas às da validação anterior para 300 clientes do
+  conjunto de teste, para categoria inválida (HTTP 422) e sem modelo
+  (`/health` com `model_loaded: false`, `/predict` com HTTP 503).
+- `/predict` com `docs/sample_customer.json`: probabilidade **0,889**, classe **1**.
+- Os dois notebooks rodaram do início ao fim sem erros.
+- `python -m churn.train` reproduziu exatamente `docs/model_comparison.csv`
+  (validação cruzada e comparação dos três modelos refeitas).
+
 ## Ambiente
 
 - scikit-learn: 1.9.1

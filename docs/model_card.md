@@ -171,7 +171,7 @@ das probabilidades e validação externa ficam para evolução posterior.
 - **Etapa 1 (concluído):** dados, features, exclusões e uso pretendido.
 - **Etapa 2 (concluído):** performance, comparação e justificativa do
   campeão, busca de hiperparâmetros e importância das features.
-- **Etapa 3 (validado):** código modular, 9 testes aprovados e API demonstrada
+- **Etapa 3 (validado):** código modular, 21 testes aprovados e API demonstrada
   no Swagger. Evidências em `docs/validation.md`.
 - **Etapa 4 (documentação consolidada):** performance, limitações, possíveis
   vieses e instruções de reprodução. Vídeo STAR e submissão ainda pendentes.

@@ -18,6 +18,15 @@ e Preparação).
 | 8 | Avaliação Offline | Precision/Recall/F1/AUC-ROC/AUC-PR como métricas técnicas; Precision@K como métrica de negócio. |
 | 9 | Impacto | Eficiência das ações de retenção, medida pela concentração de churners reais entre os priorizados. |
 
+## Stakeholders
+
+| Quem | Papel no projeto | O que precisa do modelo |
+|---|---|---|
+| Diretoria da operadora | Patrocinadora: pediu o modelo diante da perda acelerada de clientes | Reduzir o churn sem gastar o orçamento de retenção com quem não sairia |
+| Time de retenção / CRM | Usuário da lista priorizada; revisa cada cliente e decide a ação (bloco 3) | Uma lista curta e confiável dos clientes de maior risco (Precision@K) |
+| Clientes da operadora | Afetados pelas ações de retenção | Ser abordados com ofertas relevantes, nunca penalizados pelo score (ver [Model Card](model_card.md)) |
+| Equipe de dados | Constrói, valida e mantém o modelo e a API | Métricas claras para comparar modelos e um pipeline reprodutível |
+
 ## 1. Proposta de Valor
 
 O modelo existe para priorizar um orçamento de retenção limitado,
