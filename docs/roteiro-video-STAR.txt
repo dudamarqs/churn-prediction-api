@@ -1,0 +1,39 @@
+ROTEIRO DO VIDEO STAR — CHURN PREDICTION API
+Duração planejada: 4min40s, com 20s de margem. Participação sugerida: Maria Eduarda e Gabriel.
+As métricas abaixo vêm do Model Card atual; conferir a tabela final antes da gravação.
+
+0:00–0:40 | SITUATION | Maria Eduarda
+“Nosso projeto aborda a perda de clientes de uma operadora de telecomunicações. Usamos o dataset IBM Telco Customer Churn, com 7.043 clientes e cerca de 26,5% de cancelamentos. O objetivo é priorizar clientes com maior risco para uma equipe de retenção que tem orçamento limitado.”
+Tela: README e ML Canvas. Mostrar brevemente a distribuição do alvo no notebook de EDA.
+
+0:40–1:10 | TASK | Gabriel
+“Construímos um pipeline completo: análise exploratória, preparação dos dados, comparação de três modelos e uma API de inferência. Definimos o F1 da classe churn como métrica técnica e a Precision no top 10% como métrica de negócio.”
+Tela: estrutura src/, data/, models/, tests/, notebooks/ e docs/.
+
+1:10–2:25 | ACTION — MODELAGEM | Maria Eduarda
+“Removemos identificadores e colunas que poderiam revelar o resultado, como Churn Label, Churn Score e Churn Reason. O pré-processamento fica dentro de cada pipeline para que imputação, padronização e codificação sejam ajustadas apenas com os dados de treino de cada fold. Comparamos Regressão Logística, Random Forest e MLP, usando divisão estratificada e seed fixa. O campeão foi escolhido pelo F1 médio da validação cruzada de cinco folds, sem usar o conjunto de teste para decidir.”
+Tela: config.py, features.py e tabela comparativa. Evitar ler o código inteiro.
+
+2:25–3:20 | ACTION — ENGENHARIA E API | Gabriel
+“Separamos os notebooks de experimentação do pacote Python produtivo. Salvamos o pipeline completo em champion.joblib, de forma que a API use o mesmo pré-processamento do treino. A API possui /health para verificar o estado do serviço e do modelo e /predict para validar os dados do cliente e retornar a probabilidade e a classe prevista. Os testes verificam a limpeza, a divisão dos dados e o comportamento da API.”
+Tela: resultado real do pytest e Swagger em http://127.0.0.1:8000/docs.
+IMPORTANTE: citar a quantidade de testes e o resultado somente depois de executar a suíte final.
+
+3:20–4:10 | RESULT — DEMONSTRAÇÃO | Gabriel
+Executar GET /health no Swagger, depois POST /predict com o exemplo validado do README.
+“Aqui o modelo está carregado. Enviamos o perfil de um cliente e recebemos esta probabilidade de churn e a classificação com corte de 0,5.”
+Explicar o valor real retornado na tela; não inventar uma previsão.
+Maria Eduarda: “O Random Forest obteve F1 médio de aproximadamente 0,650 na validação cruzada e 0,632 no teste. Entre os 10% dos clientes mais bem ranqueados no teste, 77,1% tinham churn observado. O ganho sobre a regressão logística foi modesto, e isso está registrado no Model Card.”
+
+4:10–4:40 | RESULT — LIMITAÇÕES E ENCERRAMENTO | Maria Eduarda
+“O dataset é um retrato estático: o modelo não prevê quando o cliente vai cancelar. A generalização para outra operadora ainda precisa ser avaliada, e possíveis vieses são documentados. A proposta é apoiar uma equipe humana de retenção. Entregamos código modular, comparação dos modelos, API, testes e documentação para reprodução local.”
+Tela: Model Card e README com os comandos de execução.
+
+ANTES DE GRAVAR
+- Iniciar a API e testar o payload.
+- Executar pytest e deixar a saída visível.
+- Fechar telas com notificações, credenciais ou dados pessoais.
+- Conferir áudio dos dois participantes e o limite de 5 minutos.
+- Abrir o link final do vídeo com uma sessão que não seja a do proprietário para verificar o acesso.
+- Confirmar acesso do avaliador ao repositório privado conforme a orientação da plataforma de entrega.
+- Submeter os links do repositório e do vídeo na plataforma da disciplina.

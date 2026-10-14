@@ -6,6 +6,7 @@ Executar da raiz do projeto:
 """
 
 from functools import lru_cache
+from pathlib import Path
 
 import joblib
 import pandas as pd
@@ -22,11 +23,19 @@ app = FastAPI(
 
 
 @lru_cache(maxsize=1)
+def _load_model(path: Path):
+    """Mantém em cache somente o artefato carregado com sucesso."""
+    return joblib.load(path)
+
+
 def get_model():
-    """Carrega o Pipeline treinado uma única vez por processo."""
+    """Permite encontrar um modelo criado após a primeira chamada à API.
+
+    Para substituir um artefato já carregado, reinicie o processo da API.
+    """
     if not config.MODEL_PATH.exists():
         return None
-    return joblib.load(config.MODEL_PATH)
+    return _load_model(config.MODEL_PATH)
 
 
 @app.get("/health", response_model=HealthResponse)

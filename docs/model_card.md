@@ -1,10 +1,8 @@
 # Model Card — Churn Prediction
 
-> Documento vivo, atualizado em etapas junto com o desenvolvimento do
-> projeto (ver seção "Status" no fim). Esta versão fecha os fatos da
-> Etapa 1 e a performance/campeão da Etapa 2. API e reprodutibilidade
-> (Etapa 3) e a revisão final de limitações/vieses (Etapa 4) entram nas
-> próximas atualizações.
+> Consolidação da documentação para a entrega. As métricas de modelagem
+> são as dos experimentos registrados; a validação local da API e do ambiente
+> foi registrada separadamente em `docs/validation.md`.
 
 ## Visão geral e uso pretendido
 
@@ -136,23 +134,44 @@ tem importância perto de zero porque seu sinal já está quase todo em
   correlacionadas indiretamente com geografia/renda (ex.: tipo de
   internet, forma de pagamento) permanecem no modelo e podem carregar
   proxies desse viés. Não quantificado nesta etapa.
-- `gender` tem importância nula no modelo (dentro do ruído da
-  permutação): o ranking não usa gênero. Isso não garante ausência de
+- `gender` tem importância aproximadamente nula na análise de
+  permutação; esse resultado não demonstra que o modelo nunca use gênero.
+  Isso não garante ausência de
   viés — uma feature pouco importante ainda pode ter desempenho desigual
   entre grupos.
 - Nenhuma análise de desempenho por subgrupo (ex.: por faixa etária via
-  `senior_citizen`, por `gender`) foi feita até aqui — fica como item para
-  a revisão final da Etapa 4.
+  `senior_citizen`, por `gender`) foi feita até aqui. É uma limitação
+  documentada e um trabalho futuro, necessário antes de uso operacional.
 
 ## Reprodutibilidade
 
-Seeds fixas em `churn.config.RANDOM_STATE` (treino, split e CV). Detalhes
-de ambiente/execução (API, testes) entram nesta seção após a Etapa 3.
+Seeds fixas em `churn.config.RANDOM_STATE` (treino, split e CV).
+Instalação: ambiente virtual Python 3.12 e `python -m pip install -e ".[dev]"`.
+O ambiente validado está registrado em `docs/validation.md` e
+`requirements-lock.txt`. O arquivo serializado exige uma versão compatível
+do scikit-learn; use a versão de treino registrada na validação.
+
+Treino: `python -m churn.train`. API: `python -m uvicorn churn.api.main:app`.
+Testes: `python -m pytest -q`. Exemplo completo: `docs/sample_customer.json`.
+O teste de inferência usa o artefato real e falha caso ele não exista.
+
+`GET /health` retorna o estado do serviço e `model_loaded`; não é garantia
+de qualidade preditiva. `POST /predict` retorna a probabilidade arredondada
+a quatro casas e a classe com corte de 0,5; entrada inválida retorna 422
+e ausência do artefato retorna 503. O pipeline carregado fica em cache:
+reinicie a API ao substituir um modelo já carregado.
+
+Não houve novo treinamento nesta consolidação. O ganho observado sobre o
+baseline não comprova significância estatística ou impacto de retenção.
+O projeto é uma demonstração acadêmica; monitoramento de drift, calibração
+das probabilidades e validação externa ficam para evolução posterior.
 
 ## Status
 
 - **Etapa 1 (concluído):** dados, features, exclusões e uso pretendido.
 - **Etapa 2 (concluído):** performance, comparação e justificativa do
   campeão, busca de hiperparâmetros e importância das features.
-- **Etapa 3 (pendente):** reprodutibilidade de ambiente e comportamento via API.
-- **Etapa 4 (pendente):** revisão final de limitações e vieses, consolidação.
+- **Etapa 3 (validado):** código modular, 9 testes aprovados e API demonstrada
+  no Swagger. Evidências em `docs/validation.md`.
+- **Etapa 4 (documentação consolidada):** performance, limitações, possíveis
+  vieses e instruções de reprodução. Vídeo STAR e submissão ainda pendentes.
