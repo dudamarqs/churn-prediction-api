@@ -9,11 +9,11 @@ from functools import lru_cache
 from pathlib import Path
 
 import joblib
-import pandas as pd
 from fastapi import FastAPI, HTTPException
 
 from churn import config
 from churn.api.schemas import CustomerFeatures, HealthResponse, PredictionResponse
+from churn.predict import classify, predict_proba
 
 app = FastAPI(
     title="Churn Prediction API",
@@ -54,10 +54,9 @@ def predict(customer: CustomerFeatures) -> PredictionResponse:
             detail="Modelo nao encontrado. Execute 'python -m churn.train' primeiro.",
         )
 
-    X = pd.DataFrame([customer.model_dump()])[config.FEATURES]
-    proba = float(model.predict_proba(X)[0, 1])
+    proba = float(predict_proba(model, customer.model_dump())[0])
 
     return PredictionResponse(
         churn_probability=round(proba, 4),
-        churn_prediction=int(proba >= 0.5),
+        churn_prediction=classify(proba),
     )

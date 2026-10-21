@@ -28,6 +28,17 @@ def cross_validate_f1(pipeline, X, y) -> tuple[float, float]:
     return float(scores.mean()), float(scores.std())
 
 
+def rank_models(rows: list[dict]) -> pd.DataFrame:
+    """Ordena os candidatos do melhor para o pior; o primeiro é o campeão.
+
+    O critério é o F1 médio da validação cruzada (só treino). O teste fica
+    reservado para a estimativa final: usá-lo na escolha o transformaria em
+    mais um conjunto de validação e deixaria as métricas reportadas
+    otimistas.
+    """
+    return pd.DataFrame(rows).sort_values("cv_f1_mean", ascending=False).reset_index(drop=True)
+
+
 def run() -> pd.DataFrame:
     """Treina os candidatos, compara e salva o campeão em models/."""
     df = data.load_clean()
@@ -46,11 +57,7 @@ def run() -> pd.DataFrame:
         fitted[name] = pipeline
         rows.append({"model": name, "cv_f1_mean": cv_mean, "cv_f1_std": cv_std, **evaluate(y_test, y_pred, y_proba)})
 
-    # O campeão é escolhido pelo F1 médio da validação cruzada (só treino).
-    # O teste fica reservado para a estimativa final: usá-lo na escolha o
-    # transformaria em mais um conjunto de validação e deixaria as métricas
-    # reportadas otimistas.
-    results = pd.DataFrame(rows).sort_values("cv_f1_mean", ascending=False).reset_index(drop=True)
+    results = rank_models(rows)
 
     champion_name = results.loc[0, "model"]
     config.MODELS_DIR.mkdir(parents=True, exist_ok=True)

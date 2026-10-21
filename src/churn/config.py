@@ -130,3 +130,8 @@ FEATURES = NUM_FEATURES + CAT_FEATURES
 # Métrica de negócio Precision@K (ver docs/metrics.md): fração da base
 # priorizada pelo time de retenção. Suposição inicial, revisável na Etapa 2.
 TOP_K_PERCENT = 0.10
+
+# Corte de probabilidade da classe prevista devolvida pela API. A decisão
+# de negócio é por ranking (Precision@K), não por este corte — ver
+# docs/model_card.md.
+DECISION_THRESHOLD = 0.5
