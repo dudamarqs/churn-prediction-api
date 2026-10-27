@@ -7,7 +7,7 @@ por uma API REST, com Scikit-Learn e FastAPI.
 **Equipe:** Maria Eduarda Marques ([@dudamarqs](https://github.com/dudamarqs))
 e Gabriel Silva Jorge ([@3ielzinh](https://github.com/3ielzinh))
 
-**Vídeo de apresentação (método STAR, até 5 min):** _link a adicionar após a gravação_
+**Vídeo de apresentação (método STAR, até 5 min):** [assistir no YouTube](https://youtu.be/PpSDr1HYWPE)
 
 ## Entregáveis
 
