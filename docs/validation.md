@@ -4,7 +4,7 @@ Data: 13/10/2026. Python 3.12.14 em Windows.
 
 ## Resultados
 
-- `python -m pytest -q`: **9 passed**, sem testes ignorados (4,84 s).
+- `python -m pytest -q`: **9 passed**, sem testes ignorados (4,84 s). Antes do PR #6; a contagem atual (21) está na atualização de 14/10 abaixo.
 - Um aviso de depreciação do cliente httpx/Starlette; não causou falha.
 - `/health`: HTTP 200, `status: ok`, `model_loaded: true`.
 - `/predict`: HTTP 200, probabilidade **0,889**, classe **1**, usando `docs/sample_customer.json`.
@@ -40,12 +40,10 @@ Instale Python 3.12 se `py -3.12` não estiver disponível. O lock inclui depend
 
 ## Limites e pendências
 
-- Notebooks não foram executados novamente; as métricas e saídas originais foram preservadas.
-- A comparação completa dos três modelos e a CV não foram repetidas; foi conferido o campeão salvo contra o split documentado.
+- Notebooks não foram executados novamente; as métricas e saídas originais foram preservadas. Resolvido na atualização de 14/10.
+- A comparação completa dos três modelos e a CV não foram repetidas; foi conferido o campeão salvo contra o split documentado. Resolvido na atualização de 14/10.
 - Análise quantitativa por subgrupo, calibração e validação externa ficam para trabalho futuro.
 - Campos da API validam categorias e limites individuais, mas não todas as relações entre serviços.
-- Vídeo STAR ainda precisa ser gravado/publicado, e os links submetidos na plataforma.
-- Esta cópia foi obtida por ZIP; o histórico de commits permanece no GitHub original. As alterações locais não foram publicadas.
 
 ## Atualização — 14/10/2026 (PR #6)
 

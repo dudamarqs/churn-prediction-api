@@ -173,5 +173,5 @@ das probabilidades e validação externa ficam para evolução posterior.
   campeão, busca de hiperparâmetros e importância das features.
 - **Etapa 3 (validado):** código modular, 21 testes aprovados e API demonstrada
   no Swagger. Evidências em `docs/validation.md`.
-- **Etapa 4 (documentação consolidada):** performance, limitações, possíveis
-  vieses e instruções de reprodução. Vídeo STAR e submissão ainda pendentes.
+- **Etapa 4 (concluído):** performance, limitações, possíveis vieses e
+  instruções de reprodução. Vídeo STAR publicado (link no README).
